@@ -18,63 +18,32 @@ import com.google.android.material.textfield.TextInputLayout;
 
 public class LoginActivity extends AppCompatActivity {
 
-    private TextInputLayout inputUid,inputName;
     private TextInputEditText mobile;
-    private TextInputEditText name;
-    private MaterialButton createUserBtn;
+    private MaterialButton loginBtn;
+    private MaterialButton signupBtn;
     private ProgressBar progressBar;
-    private TextView title;
-    private TextView des1,des2;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_login);
-
-        inputUid = findViewById(R.id.inputNumber);
-        inputName = findViewById(R.id.inputName);
         progressBar = findViewById(R.id.createUser_pb);
-
         mobile = findViewById(R.id.etMobile);
-        name = findViewById(R.id.etName);
-        createUserBtn = findViewById(R.id.create_user_btn);
-        createUserBtn.setTextColor(getResources().getColor(R.color.textColorWhite));
-
-        createUserBtn.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                signInTapped();
-            }
-        });
+        signupBtn = findViewById(R.id.create_user_btn);
+        loginBtn = findViewById(R.id.login_user_btn);
+        loginBtn.setTextColor(getResources().getColor(R.color.textColorWhite));
+        loginBtn.setOnClickListener(v ->
+                signInTapped()
+        );
+        signupBtn.setOnClickListener(v ->
+                startActivity(new Intent(LoginActivity.this, RegistrationActivity.class))
+        );
     }
-
 
     private void signInTapped(){
-
-
         User user = new User();
-        user.setUid(name.getText().toString().charAt(0) + mobile.getText().toString());
-        user.setName(name.getText().toString());
-
-//        registerUser(user);
+        user.setUid(mobile.getText().toString());
         login(user);
-    }
-
-    private void registerUser(User user) {
-        progressBar.setVisibility(View.VISIBLE);
-        CometChat.createUser(user, AppConfig.AppDetails.API_KEY, new CometChat.CallbackListener<User>() {
-            @Override
-            public void onSuccess(User user) {
-                progressBar.setVisibility(View.GONE);
-                login(user);
-            }
-
-            @Override
-            public void onError(CometChatException e) {
-                progressBar.setVisibility(View.GONE);
-                createUserBtn.setClickable(true);
-                Toast.makeText(LoginActivity.this,"Failed to create user",Toast.LENGTH_LONG).show();
-            }
-        });
     }
 
     private void login(User user) {
@@ -83,15 +52,15 @@ public class LoginActivity extends AppCompatActivity {
             @Override
             public void onSuccess(User user) {
                 progressBar.setVisibility(View.GONE);
-                Log.d("LoginActivity", "Login Successful");
                 startActivity(new Intent(LoginActivity.this, ConversationsActivity.class));
             }
-
             @Override
             public void onError(CometChatException e) {
                 progressBar.setVisibility(View.GONE);
-                Log.d("LoginActivity", "Login Error");
+                Toast.makeText(LoginActivity.this, e.getLocalizedMessage(), Toast.LENGTH_LONG).show();
             }
         });
     }
+
+
 }
