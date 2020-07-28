@@ -42,7 +42,6 @@ public class RegistrationActivity extends AppCompatActivity {
     private void signUpTapped(){
         User user = new User();
         user.setUid(mobile.getText().toString());
-//        user.setUid(name.getText().toString().charAt(0) + mobile.getText().toString());
         user.setName(name.getText().toString());
         registerUser(user);
     }

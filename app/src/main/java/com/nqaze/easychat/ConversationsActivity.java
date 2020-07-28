@@ -7,6 +7,7 @@ import android.view.View;
 
 import androidx.appcompat.app.AppCompatActivity;
 
+import com.cometchat.pro.constants.CometChatConstants;
 import com.cometchat.pro.models.Conversation;
 import com.cometchat.pro.models.Group;
 import com.cometchat.pro.models.User;
@@ -14,6 +15,7 @@ import com.cometchat.pro.models.User;
 import constant.StringContract;
 import listeners.OnItemClickListener;
 import screen.CometChatConversationListScreen;
+import screen.messagelist.CometChatMessageListActivity;
 
 public class ConversationsActivity extends AppCompatActivity {
 
@@ -25,12 +27,12 @@ public class ConversationsActivity extends AppCompatActivity {
         CometChatConversationListScreen.setItemClickListener(new OnItemClickListener<Conversation>() {
             @Override
             public void OnItemClick(Conversation var, int position) {
-                User user = User.fromJson(var.getConversationWith().toString());
-
-                Intent intent = new Intent(ConversationsActivity.this,ChatMessageActivity.class);
+                User user = (User)var.getConversationWith();
+                Intent intent = new Intent(ConversationsActivity.this, CometChatMessageListActivity.class);
                 intent.putExtra(StringContract.IntentStrings.UID, user.getUid());
                 intent.putExtra(StringContract.IntentStrings.NAME, user.getName());
                 intent.putExtra(StringContract.IntentStrings.AVATAR, user.getAvatar());
+                intent.putExtra(StringContract.IntentStrings.TYPE, CometChatConstants.RECEIVER_TYPE_USER);
                 startActivity(intent);
             }
 
